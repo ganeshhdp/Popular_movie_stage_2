@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackgroundMain">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="sherpavision.app.popularmoviesstagetwo.MovieReview">
+        <TextView
+            android:layout_width="@dimen/no_dimen"
+            android:layout_height="wrap_content"
+            android:id="@+id/review_author"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/commong_padding"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:textSize="@dimen/movie_review_author_text_size"
+            android:textColor="@color/white"
+            android:background="@color/colorLightGrayTitle"
+            android:padding="@dimen/commong_padding"/>
+        <TextView
+            android:id="@+id/review_content"
+            android:padding="@dimen/commong_padding"
+            android:layout_width="@dimen/no_dimen"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="@+id/review_author"
+            app:layout_constraintRight_toRightOf="@+id/review_author"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:textColor="@color/white"
+            android:background="@color/colorLightGrayTitle"
+            android:layout_marginTop="@dimen/no_dimen"
+            app:layout_constraintTop_toBottomOf="@+id/review_author" />
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>
