@@ -1,7 +1,10 @@
- PopularMovies-Stage1 : 
+ PopularMovies-Stage2 : 
 Please add API Key in following class
-src/main/java/com/example/ganesh/popular_movies_stage_1/data/MovieConsts.java
+app/src/main/java/com/learn/nanodegree/PopularStage2/data/MovieConsts.java
 
-![Alt text](./movielist.png?raw=true)
-![Alt text](./movie_selected.png?raw=true)
+![Alt text](./welcome.png?raw=true)
+![Alt text](./fav.png?raw=false)
+![Alt text](./top_rated.png?raw=true)
+![Alt text](./fav_selected.png?raw=true)
+![Alt text](./fav_un_selected?raw=true)
 # Popular_movie_stage_2

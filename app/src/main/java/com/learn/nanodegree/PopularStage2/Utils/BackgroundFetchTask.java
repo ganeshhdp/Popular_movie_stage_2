@@ -18,55 +18,13 @@ import java.net.URL;
 
     public class BackgroundFetchTask {
 
-
-
-  /*  public interface Delegate {
-            void onMovieDataDelegated(Vector<ContentValues> contentValues) ;
-        }
-
-        Delegate delegate = null;
-        public boolean sortOrder;
-
-        public BackgroundFetchTask(Delegate delegate){
-            this.delegate = delegate;
-        }
-
-        public void sortOrder(
-            boolean sort) {
-            sortOrder = sort;
-        }
-        @Override
-        protected Vector<ContentValues> doInBackground(Void... params) {
-            Vector<ContentValues> vector = null;
-            try {
-                URL mUrl = NetworkUtil.buildUrl(sortOrder);
-                String result = NetworkUtil.getResponseFromHttpUrl(mUrl);
-                vector = MovieJsonUtils.getMovieDataFromJsonString(result);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return vector;
-        }
-
-        @Override
-        protected void onPostExecute(Vector<ContentValues> contentValues) {
-            super.onPostExecute(contentValues);
-            delegate.onMovieDataDelegated(contentValues);
-        }*/
-
         public static ContentValues[] fetchMovieDetails(String... params) {
-            System.out.println("ganesh in fetchMovieDetails");
            ContentValues[] mContentValues=null;
             String movie_type = params[0];
             try {
                 URL mUrl = NetworkUtil.buildUrl(movie_type);
                 String result = NetworkUtil.getResponseFromHttpUrl(mUrl);
                 mContentValues = MovieJsonUtils.getMovieDataFromJsonString(result);
-                System.out.println("ganesh in the fetchMovieDetails ::"+mContentValues.toString());
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
