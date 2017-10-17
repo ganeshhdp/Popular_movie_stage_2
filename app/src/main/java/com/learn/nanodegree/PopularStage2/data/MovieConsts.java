@@ -11,6 +11,7 @@ import android.net.Uri;
  */
 
 
+
 public class MovieConsts {
 
     public static final String MOVIE_URL = "http://api.themoviedb.org/3/movie/";
