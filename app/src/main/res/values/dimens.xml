@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="error_message_display_padding">16dp</dimen>
+    <dimen name="error_message_display_text_size">20sp</dimen>
+    <dimen name="progress_bar_layout_width">42dp</dimen>
+    <dimen name="progress_bar_layout_height">42dp</dimen>
+
+    <dimen name="no_dimen">0dp</dimen>
+    <dimen name="commong_padding">8dp</dimen>
+    <dimen name="commong_padding2">5dp</dimen>
+    <dimen name="commong_padding3">16dp</dimen>
+    <dimen name="commong_padding4">1dp</dimen>
+
+    <dimen name="movie_review_author_text_size">20dp</dimen>
+    <dimen name="movie_review_title_text_size">20dp</dimen>
+    <dimen name="movie_review_vote_average_text_size">24dp</dimen>
+    <dimen name="movie_review_favorite_toggle_dimen">40dp</dimen>
+
+    <dimen name="movie_details_image_width_size">120dp</dimen>
+    <dimen name="movie_details_image_height_size">180dp</dimen>
+
+    <dimen name="movie_details_trailer_height_size">200dp</dimen>
+
+    <dimen name="movie_details_trailer_play_button_height_size">40dp</dimen>
+    <dimen name="movie_details_trailer_play_button_width_size">40dp</dimen>
+
+    <dimen name="movie_details_trailer_image_height_size">500dp</dimen>
+
+</resources>

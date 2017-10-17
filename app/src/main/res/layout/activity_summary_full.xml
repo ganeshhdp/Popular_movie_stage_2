@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="sherpavision.app.popularmoviesstagetwo.SummaryFullActivity"
+    android:background="@color/colorBackgroundMain">
+    <TextView
+        android:id="@+id/full_summary_text"
+        android:layout_width="@dimen/no_dimen"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/no_dimen"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="@dimen/no_dimen"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/commong_padding3"
+        android:textColor="@color/white"
+        android:background="@color/colorLightGrayTitle"
+        android:padding="@dimen/commong_padding"/>
+
+</android.support.constraint.ConstraintLayout>

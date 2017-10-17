@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="@dimen/no_dimen"
+            android:layout_height="@dimen/movie_details_trailer_image_height_size"
+            android:id="@+id/trialer_image_view"
+            android:layout_marginLeft="@dimen/no_dimen"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginRight="@dimen/no_dimen"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/no_dimen"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/no_dimen" />
+        <Button
+            android:id="@+id/play_button"
+            android:layout_width="@dimen/movie_details_trailer_play_button_width_size"
+            android:layout_height="@dimen/movie_details_trailer_play_button_height_size"
+            android:background="@drawable/ic_play_button"
+            android:layout_marginRight="@dimen/commong_padding"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/trialer_image_view"
+            android:layout_marginTop="@dimen/commong_padding"
+            app:layout_constraintBottom_toBottomOf="@+id/trialer_image_view"
+            android:layout_marginBottom="@dimen/commong_padding"
+            app:layout_constraintVertical_bias="0.5"
+            android:layout_marginLeft="@dimen/commong_padding"
+            app:layout_constraintLeft_toLeftOf="@+id/trialer_image_view" />
+</android.support.constraint.ConstraintLayout>
