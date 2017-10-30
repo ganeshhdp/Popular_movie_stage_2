@@ -6,19 +6,23 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -34,26 +38,26 @@ import java.util.Vector;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class WelcomeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, MovieAdapter.MovieClickListener{
+public class WelcomeActivity extends AppCompatActivity implements ActionBar.TabListener,LoaderManager.LoaderCallbacks<Cursor>, MovieAdapter.MovieClickListener{
 
     MovieAdapter mAdapter;
-    @BindView(R.id.toolbar)
-    Toolbar toolBar;
     @BindView(R.id.rv_posters)
     RecyclerView gridView;
-    @BindView(R.id.tab_layout)
-    TabLayout tabLayout;
     @BindView(R.id.pb_loading_indicator)
     ProgressBar mProgressBar;
     @BindView(R.id.tv_error_message_display)
     TextView mErrorMessageDisplay;
+    @BindView(R.id.no_fav)
+            TextView noFav;
 
 
     String tabselected=MovieConsts.MOVIE_POPULAR;
-    private static final int POPULAR_ID =100;
-    private static final int TOP_RATED_ID= 101;
-    private static final int FAVORITE_ID = 102;
-    private static int mTabSelected;
+    static public boolean onResumeCalled;
+    private static final int POPULAR_ID =0;
+    private static final int TOP_RATED_ID= 1;
+    private static final int FAVORITE_ID = 2;
+    private static int mTabSelected=0;
+    private int mPosition = RecyclerView.NO_POSITION;
 
     static final String[] MOVIE_COLUMNS = {
             MovieContract.PopularMovies._ID,
@@ -68,6 +72,8 @@ public class WelcomeActivity extends AppCompatActivity implements LoaderManager.
             MovieContract.PopularMovies.COLUMN_REVIEW,
             MovieContract.PopularMovies.COLUMN_REVIEW_NAME
     };
+
+    private int[] recyclerItemPosition = new int[3];
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +83,10 @@ public class WelcomeActivity extends AppCompatActivity implements LoaderManager.
         setUpTabs();
         showLoading();
         if(savedInstanceState != null ){
-            mTabSelected = savedInstanceState.getInt("tabselected");
-            getSupportActionBar().setSelectedNavigationItem(mTabSelected);
+            mTabSelected = savedInstanceState.getInt("mTabselected");
+
+            recyclerItemPosition=savedInstanceState.getIntArray("scrollPosition");
+            tabselected = savedInstanceState.getString("tabSelected");
         }
         RecyclerView.ItemAnimator animator = new DefaultItemAnimator();
         animator.setAddDuration(3000);
@@ -92,52 +100,32 @@ public class WelcomeActivity extends AppCompatActivity implements LoaderManager.
         Intent serviceIntent = new Intent(this, MovieLoadingService.class);
         serviceIntent.putExtra("sample","sample");
         startService(serviceIntent) ;
-        getSupportLoaderManager().restartLoader(POPULAR_ID,null,this);
+    }
 
-
+    @Override
+    protected void onResume() {
+        getSupportActionBar().setSelectedNavigationItem(mTabSelected);
+        onResumeCalled = true;
+        restartLoader(mTabSelected);
+        super.onResume();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt("tabselected",mTabSelected);
+        outState.putInt("mTabselected",mTabSelected);
+        recyclerItemPosition[mTabSelected]=((GridLayoutManager)gridView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+        outState.putIntArray("scrollPosition",recyclerItemPosition);
+        outState.putString("tabSelected",tabselected);
         super.onSaveInstanceState(outState);
     }
 
     private void setUpTabs() {
-        setSupportActionBar(toolBar);
-        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.popular)));
-        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.top_rated)));
-        tabLayout.addTab(tabLayout.newTab().setText("Favourites"));
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                mTabSelected = tab.getPosition();
-                if(tab.getText().equals(getResources().getString(R.string.popular))){
-                    tabselected = MovieConsts.MOVIE_POPULAR;
-                    restartLoader(POPULAR_ID);
-                   // loadMovieData(false);
-                }
-                if(tab.getText().equals(getResources().getString(R.string.top_rated))){
-                   // loadMovieData(true);
-                    tabselected = MovieConsts.MOVIE_TOP_RATED;
-                    restartLoader(TOP_RATED_ID);
-                }
-                if(tab.getText().equals("Favourites")){
-                   // loadMovieData(false);
-                    tabselected = MovieConsts.MOVIE_FAVORITE;
-                    restartLoader(FAVORITE_ID);
-                }
-            }
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.addTab(actionBar.newTab().setText(getResources().getString(R.string.popular)).setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setText(getResources().getString(R.string.top_rated)).setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setText("Favourites").setTabListener(this));
     }
 
     public void restartLoader(int id) {
@@ -177,6 +165,7 @@ public class WelcomeActivity extends AppCompatActivity implements LoaderManager.
     private void showMovieDataView() {
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
         mProgressBar.setVisibility(View.INVISIBLE);
+        noFav.setVisibility(View.INVISIBLE);
         gridView.setVisibility(View.VISIBLE);
     }
 
@@ -211,9 +200,72 @@ public class WelcomeActivity extends AppCompatActivity implements LoaderManager.
         if(data != null && data.getCount() > 0){
             showMovieDataView();
             mAdapter.swapCursor(data);
+        }else{
+            if(data!=null) {
+                if (tabselected.equals(MovieConsts.MOVIE_FAVORITE) ) {
+                    mProgressBar.setVisibility(View.INVISIBLE);
+                    gridView.setVisibility(View.INVISIBLE);
+                    noFav.setVisibility(View.VISIBLE);
+                } else {
+                    showLoading();
+                }
+            }
         }
+        mPosition = recyclerItemPosition[mTabSelected];
+        if (mPosition == RecyclerView.NO_POSITION) {
+            mPosition = 0;
+            recyclerItemPosition[mTabSelected] = 0;
+        }
+        gridView.smoothScrollToPosition(recyclerItemPosition[mTabSelected]);
     }
+
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+    }
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+        mTabSelected = tab.getPosition();
+        if(onResumeCalled) {
+            if (tab.getText().equals(getResources().getString(R.string.popular))) {
+                tabselected = MovieConsts.MOVIE_POPULAR;
+                restartLoader(POPULAR_ID);
+                // loadMovieData(false);
+            }
+            if (tab.getText().equals(getResources().getString(R.string.top_rated))) {
+                // loadMovieData(true);
+                tabselected = MovieConsts.MOVIE_TOP_RATED;
+                restartLoader(TOP_RATED_ID);
+            }
+            if (tab.getText().equals("Favourites")) {
+                // loadMovieData(false);
+                tabselected = MovieConsts.MOVIE_FAVORITE;
+                restartLoader(FAVORITE_ID);
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        onResumeCalled=false;
+        recyclerItemPosition[mTabSelected]=((GridLayoutManager) gridView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+        if(((GridLayoutManager) gridView.getLayoutManager())!=null) {
+            recyclerItemPosition[tab.getPosition()] = ((GridLayoutManager) gridView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+        }
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
     }
 }

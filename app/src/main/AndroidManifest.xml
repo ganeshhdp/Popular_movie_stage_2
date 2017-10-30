@@ -18,7 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".View.MovieDetailActivity" />
+        <activity android:name=".View.MovieDetailActivity"
+            android:theme="@style/detailActivityStyle">
+        </activity>
 
         <provider
             android:name=".database.MovieProvider"

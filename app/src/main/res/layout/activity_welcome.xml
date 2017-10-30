@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.learn.nanodegree.PopularStage2.View.WelcomeActivity">
 
-    <android.support.design.widget.AppBarLayout
+   <!-- <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/app_layout">
@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
-    </android.support.design.widget.AppBarLayout>
+    </android.support.design.widget.AppBarLayout>-->
 
     <ProgressBar
         android:id="@+id/pb_loading_indicator"
@@ -42,7 +42,7 @@
     android:layout_alignParentTop="true"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
-    android:layout_marginTop="19dp"></android.support.v7.widget.RecyclerView>
+    ></android.support.v7.widget.RecyclerView>
 
     <TextView
         android:id="@+id/tv_error_message_display"
@@ -52,5 +52,13 @@
         android:text="An Error has occured. Check your API key, Internet Connection or Please try again later ... "
         android:textSize="@dimen/error_message_display_text_size"
         android:visibility="invisible" />
+    <TextView
+        android:id="@+id/no_fav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:visibility="gone"
+        android:text="No movies added in to Favorites"
+        android:layout_gravity="center"/>
 
 </FrameLayout>

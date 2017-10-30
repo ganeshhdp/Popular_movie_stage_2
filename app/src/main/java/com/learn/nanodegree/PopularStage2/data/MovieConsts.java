@@ -15,7 +15,6 @@ import android.net.Uri;
 public class MovieConsts {
 
     public static final String MOVIE_URL = "http://api.themoviedb.org/3/movie/";
-    public static final String API_KEY="";
     public static final String MOVIE_POPULAR = "popular";
     public static final String MOVIE_TOP_RATED = "top_rated";
     public static final String MOVIE_FAVORITE = "favorite";

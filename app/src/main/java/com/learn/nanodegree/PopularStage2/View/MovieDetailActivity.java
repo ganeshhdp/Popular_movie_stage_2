@@ -5,14 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
@@ -59,6 +62,12 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieSelec
     TextView mOriginal_title;
     @BindView(R.id.recyclerview_reviews)
     RecyclerView mReviews;
+    @BindView(R.id.collapse_toolbar)
+    CollapsingToolbarLayout collapse_toolbar;
+    @BindView(R.id.MyToolbar)
+    Toolbar toolbar;
+    @BindView(R.id.bgheader)
+    ImageView bgImage;
 
 
     private int movieId;
@@ -116,6 +125,14 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieSelec
                 .placeholder(R.drawable.ic_loading)
                 .into(mMovieThumbnail);
 
+        String backdrop_path = selectedMovie.getBackdrop_path();
+
+        Picasso.with(getApplicationContext())
+                .load("http://image.tmdb.org/t/p/w185/" + backdrop_path)
+                .error(R.drawable.ic_no_wifi)
+                .placeholder(R.drawable.ic_loading)
+                .into(bgImage);
+
         if (summaryText != null) {
             mOverView.setText(summaryText);
         }
@@ -124,7 +141,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieSelec
         String originalTitleText = selectedMovie.getOriginal_title();
 
         SpannableString ss1 = new SpannableString(originalTitleText);
-        ss1.setSpan(new RelativeSizeSpan(1f), 0, originalTitleText.length(), 0); // set size
+        ss1.setSpan(new RelativeSizeSpan(2f), 0, originalTitleText.length(), 0); // set size
         SpannableString ss2 = new SpannableString(releaseDateText);
         ss2.setSpan(new RelativeSizeSpan(0.6f), 0, releaseDateText.length(), 0); // set size
         ss2.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorReleaseDate)), 0, releaseDateText.length(), 0);// set color
@@ -132,7 +149,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieSelec
 
         if (originalTitleText != null && releaseDateText != null) {
             mOriginal_title.setText(ss1);
-            mOriginal_title.append(ss2);
+            mOriginal_title.append("   "+ss2);
         }
         String vote_average = selectedMovie.getVote_average()+"/10";
         mVote_average.setText(vote_average);
@@ -147,7 +164,12 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieSelec
         mRecyclerView.setAdapter(mMovieSelectedAdapter);
         loadMovieData(mMovieSelectedCursor);
         setFavImage();
-
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        CollapsingToolbarLayout collapsingToolbar =
+                (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar);
+        collapsingToolbar.setTitleEnabled(false);
+        getSupportActionBar().setTitle("");
     }
 
     @Override
@@ -158,7 +180,9 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieSelec
     public void onFavorited(View view) {
         view.setSelected(!view.isSelected());
         ContentValues favoriteValue = new ContentValues();
-        DatabaseUtils.cursorRowToContentValues(mMovieSelectedCursor, favoriteValue);
+        if(mMovieSelectedCursor!=null && mMovieSelectedCursor.getCount()>0) {
+            DatabaseUtils.cursorRowToContentValues(mMovieSelectedCursor, favoriteValue);
+        }
         Uri favMovieWithId = MovieContract.FavoriteMovie.buildSelectedFavoriteMovieUri(movieId);
 
         Cursor mCursor = getContentResolver().query(favMovieWithId,

@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
+import com.learn.nanodegree.PopularStage2.BuildConfig;
 import com.learn.nanodegree.PopularStage2.data.MovieConsts;
 
 /**
@@ -24,7 +25,7 @@ public class NetworkUtil {
     public static URL buildUrl(String movieType) throws MalformedURLException {
 
             Uri buildUri = Uri.parse(MovieConsts.getUrlString(movieType)).buildUpon()
-                    .appendQueryParameter("api_key", MovieConsts.API_KEY).build();
+                    .appendQueryParameter("api_key", BuildConfig.THE_MOVIE_DB_API_TOKEN).build();
         URL mUrl = null;
         try {
             mUrl = new URL(buildUri.toString());
@@ -38,7 +39,7 @@ public class NetworkUtil {
 
     public static URL buildTrailerUrl(int id){
         Uri buildUri = Uri.parse(MovieConsts.getTrailerUrlString(id)).buildUpon()
-                .appendQueryParameter("api_key", MovieConsts.API_KEY).build();
+                .appendQueryParameter("api_key", BuildConfig.THE_MOVIE_DB_API_TOKEN).build();
         URL mUrl = null;
         try {
             mUrl = new URL(buildUri.toString());
@@ -52,7 +53,7 @@ public class NetworkUtil {
 
     public static URL buildReviewUrl(int id){
         Uri buildUri = Uri.parse(MovieConsts.getReviewUrl(id)).buildUpon()
-                .appendQueryParameter("api_key", MovieConsts.API_KEY).build();
+                .appendQueryParameter("api_key", BuildConfig.THE_MOVIE_DB_API_TOKEN).build();
         URL mUrl = null;
         try {
             mUrl = new URL(buildUri.toString());
@@ -67,6 +68,8 @@ public class NetworkUtil {
 
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setConnectTimeout(10000);
+        urlConnection.setReadTimeout(10000);
         try {
             InputStream in = urlConnection.getInputStream();
 

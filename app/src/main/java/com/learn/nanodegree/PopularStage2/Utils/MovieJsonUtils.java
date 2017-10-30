@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Vector;
@@ -72,7 +73,7 @@ public class MovieJsonUtils {
 
     public static String fetchMovieTrailerInfo(int id){
         String result = null;
-        String videoKey=null;
+        StringBuilder videoKey = new StringBuilder();
         try {
             URL mUrl = NetworkUtil.buildTrailerUrl(id);
             result = NetworkUtil.getResponseFromHttpUrl(mUrl);
@@ -81,8 +82,9 @@ public class MovieJsonUtils {
             for (int i = 0; i < resultArray.length(); i++) {
                 JSONObject movieVideo = resultArray.getJSONObject(i);
                 String type = movieVideo.getString("type");
-                if("Trailer".equals(type)){
-                    videoKey = movieVideo.getString("key");
+                if("Trailer".equals(type) ){
+                    videoKey.append( movieVideo.getString("key"));
+                    videoKey.append(MovieConsts.MOVIEDB_DELIMINATOR);
                 }
             }
            // result = resultArray.getString("key");
@@ -93,21 +95,29 @@ public class MovieJsonUtils {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return videoKey;
+        return videoKey.toString();
     }
 
 
     private static String[] fetchMovieReviewInfo(int id){
-        String result[] = new String[2];
+        StringBuilder result[] = new StringBuilder[2];
+        String[] stringResult = new String[2];
         String json=null;
+        for(int i=0;i<2;i++){
+            result[i] = new StringBuilder();
+        }
         try {
             URL mUrl = NetworkUtil.buildReviewUrl(id);
             json = NetworkUtil.getResponseFromHttpUrl(mUrl);
             JSONObject resultJson = new JSONObject(json);
             JSONArray resultArray = resultJson.getJSONArray("results");
             if(resultArray.length()!=0) {
-                result[0] = resultArray.getJSONObject(0).getString("author");
-                result[1] = resultArray.getJSONObject(0).getString("content");
+                for(int i=0;i<resultArray.length();i++) {
+                    result[0].append(resultArray.getJSONObject(i).getString("author"));
+                    result[0].append(MovieConsts.MOVIEDB_DELIMINATOR);
+                    result[1].append(resultArray.getJSONObject(i).getString("content"));
+                    result[1].append(MovieConsts.MOVIEDB_DELIMINATOR);
+                }
             }else{
                 return null;
             }
@@ -118,9 +128,10 @@ public class MovieJsonUtils {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
-        return result;
+        for(int i=0;i<2;i++){
+            stringResult[i]=result[i].toString();
+        }
+        return stringResult;
     }
 
 }

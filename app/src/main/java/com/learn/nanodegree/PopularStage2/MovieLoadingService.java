@@ -38,7 +38,6 @@ public class MovieLoadingService extends IntentService {
         if (intent != null) {
           ContentValues[] mPopularValues = BackgroundFetchTask.fetchMovieDetails(MovieConsts.MOVIE_POPULAR);
             ContentValues[] mTopRatedValues = BackgroundFetchTask.fetchMovieDetails(MovieConsts.MOVIE_TOP_RATED);
- //           System.out.println("ganesh in onHandleZIntent::"+mTopRatedValues.toString());
             getContentResolver().delete(MovieContract.PopularMovies.CONTENT_URI,null,null);
             getContentResolver().delete(MovieContract.TopratedMovies.CONTENT_URI,null,null);
             if(mPopularValues!=null)

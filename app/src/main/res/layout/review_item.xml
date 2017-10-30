@@ -7,8 +7,8 @@
     android:id="@+id/review_item"
     android:background="@drawable/review_white_border">
     <TextView
-        android:layout_width="@dimen/no_dimen"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:id="@+id/review_author"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="@dimen/commong_padding"
@@ -20,8 +20,8 @@
         app:layout_constraintRight_toLeftOf="@+id/summary_more_right_arrow"
         app:layout_constraintHorizontal_bias="0.0" />
     <TextView
-        android:layout_width="@dimen/no_dimen"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:id="@+id/review_content"
         app:layout_constraintTop_toBottomOf="@+id/review_author"
         android:ellipsize="end"
